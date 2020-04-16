@@ -8,16 +8,22 @@ namespace DocumentManagement.Core
     /// </summary>
     public class OperationResult
     {
-        private OperationResult(bool successful, IReadOnlyCollection<string> errors = null)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OperationResult"/> class.
+        /// </summary>
+        /// <param name="errors">Errors.</param>
+        public OperationResult(params string[] errors)
         {
-            Successful = successful;
             Errors = errors ?? Array.Empty<string>();
         }
 
         /// <summary>
         /// Successful.
         /// </summary>
-        public bool Successful { get; }
+        public bool Successful
+        {
+            get { return Errors.Count == 0; }
+        }
 
         /// <summary>
         /// Errors.
@@ -28,13 +34,6 @@ namespace DocumentManagement.Core
         /// Create Successful result.
         /// </summary>
         /// <returns>Successful result.</returns>
-        public static OperationResult SuccessfulResult() => new OperationResult(true);
-
-        /// <summary>
-        /// Create failed result.
-        /// </summary>
-        /// <param name="errors">Errors.</param>
-        /// <returns>Failed result.</returns>
-        public static OperationResult FailedResult(params string[] errors) => new OperationResult(false, errors);
+        public static OperationResult SuccessfulResult() => new OperationResult();
     }
 }

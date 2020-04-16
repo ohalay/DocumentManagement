@@ -11,7 +11,7 @@ namespace DocumentManagement.Core.Domain
         private const string ValidFileNamePattern = @"^[0-9a-zA-Z \$\-_.+!*'(),]{1,1024}$";
         private const int MaxFileSizeButes = 5242880; // 5Mb
 
-        private DocumentEntity(string name, int fileSize, Uri location, long order = 0)
+        private DocumentEntity(string name, long fileSize, Uri location, long order = 0)
         {
             Name = name;
             FileSize = fileSize;
@@ -27,7 +27,7 @@ namespace DocumentManagement.Core.Domain
         /// <summary>
         /// File size.
         /// </summary>
-        public int FileSize { get; }
+        public long FileSize { get; }
 
         /// <summary>
         /// Location.
@@ -47,18 +47,18 @@ namespace DocumentManagement.Core.Domain
         /// <param name="location">Location.</param>
         /// <param name="order">Order.</param>
         /// <returns>Document entity.</returns>
-        public static (OperationResult, DocumentEntity) Create(string name, int size, Uri location, long order = 0)
+        public static (OperationResult, DocumentEntity) Create(string name, long size, Uri location, long order = 0)
         {
             if (string.IsNullOrEmpty(name) || !Regex.IsMatch(name, ValidFileNamePattern))
             {
                 var errorMessage = $"Invalid document name '{name}'. Supported name should contains only alphanumerics or special character '$-_.+!*'(),'.";
-                return (OperationResult.FailedResult(errorMessage), default);
+                return (new OperationResult(errorMessage), default);
             }
 
             if (size > MaxFileSizeButes)
             {
                 var errorMessage = $"Invalid file size '{size}'. Supported file size should be less then 5Mb.";
-                return (OperationResult.FailedResult(errorMessage), default);
+                return (new OperationResult(errorMessage), default);
             }
 
             return (OperationResult.SuccessfulResult(), new DocumentEntity(name, size, location, order));

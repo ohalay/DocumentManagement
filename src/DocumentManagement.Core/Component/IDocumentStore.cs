@@ -34,8 +34,8 @@ namespace DocumentManagement.Core.Component
         /// <summary>
         /// Reorder async.
         /// </summary>
-        /// <param name="entities">Entities.</param>
+        /// <param name="documents">Entities.</param>
         /// <returns>Operation result.</returns>
-        Task<IReadOnlyCollection<DocumentEntity>> ReorderAsync(params DocumentEntity[] entities);
+        Task<OperationResult> ReorderAsync(params DocumentEntity[] documents);
     }
 }

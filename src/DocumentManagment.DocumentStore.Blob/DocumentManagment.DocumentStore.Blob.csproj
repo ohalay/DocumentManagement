@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DocumentManagement.Core\DocumentManagement.Core.csproj" />
+  </ItemGroup>
+</Project>
