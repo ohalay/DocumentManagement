@@ -47,7 +47,7 @@ namespace DocumentManagement.Core.Domain
         /// <param name="location">Location.</param>
         /// <param name="order">Order.</param>
         /// <returns>Document entity.</returns>
-        public static (OperationResult, DocumentEntity) Create(string name, long size, Uri location, long order = 0)
+        public static (OperationResult result, DocumentEntity entity) Create(string name, long size, Uri location, long order = 0)
         {
             if (string.IsNullOrEmpty(name)
                 || !Regex.IsMatch(name, ValidFileNamePattern)
@@ -57,7 +57,7 @@ namespace DocumentManagement.Core.Domain
                 return (new OperationResult(errorMessage), default);
             }
 
-            if (size > MaxFileSizeButes)
+            if (size > MaxFileSizeButes || size <= 0)
             {
                 var errorMessage = $"Invalid file size '{size}'. Supported file size should be less then 5Mb.";
                 return (new OperationResult(errorMessage), default);

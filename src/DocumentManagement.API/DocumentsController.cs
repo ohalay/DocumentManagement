@@ -58,5 +58,41 @@ namespace DocumentManagement.API
 
             return await documentStore.UploadAsync(entity.Name, file.OpenReadStream());
         }
+
+        /// <summary>
+        /// Delete document.
+        /// </summary>
+        /// <param name="fileName">File name.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        [HttpDelete("{fileName}")]
+        public Task<OperationResult> DeleteAsync(string fileName)
+        {
+            return documentStore.DeleteAsync(fileName);
+        }
+
+        /// <summary>
+        /// Reorder document.
+        /// </summary>
+        /// <param name="documents">New documents order.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
+        [HttpPatch("")]
+        public async Task<OperationResult> ReorderAsync([FromBody]OrderedDocument[] documents)
+        {
+            const long fakeSize = 1;
+
+            var entities = documents.Select(s => DocumentEntity.Create(s.Name, fakeSize, null, s.Order))
+                .ToArray();
+
+            if (entities.Any(s => !s.result.Successful))
+            {
+                var errors = entities
+                    .Aggregate(Enumerable.Empty<string>(), (ac, next) => next.result.Successful ? ac : ac.Union(next.result.Errors))
+                .ToArray();
+
+                return new OperationResult(errors);
+            }
+
+            return await documentStore.ReorderAsync(entities.Select(s => s.entity).ToArray());
+        }
     }
 }
