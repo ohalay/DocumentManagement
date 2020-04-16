@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Extensions.Configuration;
 
-namespace DocumentManagment.DocumentStore.Blob.Tests
+namespace DocumentManagement.DocumentStore.Blob.Tests
 {
     public static class TestsConfigurationHelper
     {

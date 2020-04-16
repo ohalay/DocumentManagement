@@ -12,7 +12,7 @@ using DocumentManagement.Core.Component;
 using DocumentManagement.Core.Domain;
 using Microsoft.Extensions.Options;
 
-namespace DocumentManagment.DocumentStore.Blob
+namespace DocumentManagement.DocumentStore.Blob
 {
     /// <summary>
     /// Blob document store.
@@ -30,7 +30,7 @@ namespace DocumentManagment.DocumentStore.Blob
             var containerName = string.Concat(options.Value.ContainerPrefix, options.Value.ContainerName);
             container = new BlobContainerClient(options.Value.ConnectionString, containerName);
 
-            container.CreateIfNotExists();
+            container.CreateIfNotExists(PublicAccessType.Blob);
         }
 
         /// <inheritdoc/>

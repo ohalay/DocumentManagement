@@ -1,4 +1,4 @@
-﻿namespace DocumentManagment.DocumentStore.Blob
+﻿namespace DocumentManagement.DocumentStore.Blob
 {
     /// <summary>
     /// Blob storage options.

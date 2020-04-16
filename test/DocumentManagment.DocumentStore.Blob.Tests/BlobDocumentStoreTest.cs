@@ -9,7 +9,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Xunit;
 
-namespace DocumentManagment.DocumentStore.Blob.Tests
+namespace DocumentManagement.DocumentStore.Blob.Tests
 {
     public class BlobDocumentStoreTest : IClassFixture<BlobFixture>
     {

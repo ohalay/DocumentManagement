@@ -1,8 +1,14 @@
+using System;
+using System.IO;
+using System.Reflection;
+using DocumentManagement.API.Configurations;
+using DocumentManagement.DocumentStore.Blob;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace DocumentManagement
 {
@@ -31,7 +37,18 @@ namespace DocumentManagement
         /// <param name="services">Service collection.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            var config = Configuration.Get<Config>();
+
+            services
+                .AddBlobDocumentStore(s => s.ConnectionString = config.StorageAccount.ConnectionString)
+                .AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                    c.IncludeXmlComments(xmlPath);
+                })
+                .AddControllers();
         }
 
         /// <summary>
@@ -47,6 +64,12 @@ namespace DocumentManagement
             }
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger()
+                .UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseRouting();
 

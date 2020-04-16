@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using AutoFixture;
 using Azure.Storage.Blobs;
 
-namespace DocumentManagment.DocumentStore.Blob.Tests
+namespace DocumentManagement.DocumentStore.Blob.Tests
 {
     public sealed class BlobFixture : IDisposable
     {

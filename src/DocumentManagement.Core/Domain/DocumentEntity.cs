@@ -49,9 +49,11 @@ namespace DocumentManagement.Core.Domain
         /// <returns>Document entity.</returns>
         public static (OperationResult, DocumentEntity) Create(string name, long size, Uri location, long order = 0)
         {
-            if (string.IsNullOrEmpty(name) || !Regex.IsMatch(name, ValidFileNamePattern))
+            if (string.IsNullOrEmpty(name)
+                || !Regex.IsMatch(name, ValidFileNamePattern)
+                || !name.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
             {
-                var errorMessage = $"Invalid document name '{name}'. Supported name should contains only alphanumerics or special character '$-_.+!*'(),'.";
+                var errorMessage = $"Invalid document name '{name}'. Document should be only PDF with name that contains only alphanumerics or special character '$-_.+!*'(),'.";
                 return (new OperationResult(errorMessage), default);
             }
 

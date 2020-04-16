@@ -2,7 +2,7 @@
 using Azure;
 using DocumentManagement.Core;
 
-namespace DocumentManagment.DocumentStore.Blob
+namespace DocumentManagement.DocumentStore.Blob
 {
     internal static class OperationResultExtensions
     {

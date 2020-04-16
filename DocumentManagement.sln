@@ -20,9 +20,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentManagment.DocumentStore.Blob", "src\DocumentManagment.DocumentStore.Blob\DocumentManagment.DocumentStore.Blob.csproj", "{6EB019E7-F344-40D4-9B72-EC079E028C03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentManagement.DocumentStore.Blob", "src\DocumentManagment.DocumentStore.Blob\DocumentManagement.DocumentStore.Blob.csproj", "{6EB019E7-F344-40D4-9B72-EC079E028C03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentManagment.DocumentStore.Blob.Tests", "test\DocumentManagment.DocumentStore.Blob.Tests\DocumentManagment.DocumentStore.Blob.Tests.csproj", "{5007871B-50EF-475A-BAC7-2DE391F74DDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentManagement.DocumentStore.Blob.Tests", "test\DocumentManagment.DocumentStore.Blob.Tests\DocumentManagement.DocumentStore.Blob.Tests.csproj", "{5007871B-50EF-475A-BAC7-2DE391F74DDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
