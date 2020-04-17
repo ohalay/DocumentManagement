@@ -37,8 +37,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\DocumentManagment.DocumentStore.Blob\DocumentManagement.DocumentStore.Blob.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="3.5.0" />
-    <PackageReference Update="Microsoft.CodeAnalysis.CSharp.Features" Version="3.5.0" />
-  </ItemGroup>
 </Project>
