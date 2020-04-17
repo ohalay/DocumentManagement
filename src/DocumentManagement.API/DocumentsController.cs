@@ -38,7 +38,10 @@ namespace DocumentManagement.API
 
             if (operationResult.Successful)
             {
-                var documents = operationResult.Result.Select(Document.ToDocument).ToArray();
+                var documents = operationResult.Result
+                    .Select(Document.ToDocument)
+                    .OrderBy(s => s.Order)
+                    .ToArray();
                 return new OperationResult<IReadOnlyCollection<Document>>(documents);
             }
 
