@@ -40,7 +40,7 @@ namespace DocumentManagement.DocumentStore.Blob
         }
 
         /// <inheritdoc/>
-        public async Task<IReadOnlyCollection<DocumentEntity>> GetAllAsync()
+        public async Task<OperationResult<IReadOnlyCollection<DocumentEntity>>> GetAllAsync()
         {
             var documents = new List<DocumentEntity>();
 
@@ -49,11 +49,11 @@ namespace DocumentManagement.DocumentStore.Blob
                 var order = long.Parse(blob.Metadata[nameof(DocumentEntity.Order)], new NumberFormatInfo());
                 var uri = $"{container.Uri.AbsoluteUri}/{blob.Name}";
 
-                var (_, entity) = DocumentEntity.Create(blob.Name, (long)blob.Properties.ContentLength, new Uri(uri), order);
-                documents.Add(entity);
+                var operationResult = DocumentEntity.Create(blob.Name, (long)blob.Properties.ContentLength, new Uri(uri), order);
+                documents.Add(operationResult.Result);
             }
 
-            return documents.ToArray();
+            return new OperationResult<IReadOnlyCollection<DocumentEntity>>(documents);
         }
 
         /// <inheritdoc/>

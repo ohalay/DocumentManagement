@@ -29,7 +29,7 @@ namespace DocumentManagement.Core.Component
         /// Get all async.
         /// </summary>
         /// <returns>Collection of document entity.</returns>
-        Task<IReadOnlyCollection<DocumentEntity>> GetAllAsync();
+        Task<OperationResult<IReadOnlyCollection<DocumentEntity>>> GetAllAsync();
 
         /// <summary>
         /// Reorder async.

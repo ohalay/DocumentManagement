@@ -27,7 +27,7 @@ namespace DocumentManagement.DocumentStore.Blob.Tests
         [Fact]
         public async Task UploadAsync_PdfDocument_DocumentUploaded()
         {
-            var name = fixture.Create<string>();
+            var name = CreateFileName();
             var content = fixture.Create<string>();
 
             byte[] byteArray = Encoding.ASCII.GetBytes(content);
@@ -41,7 +41,7 @@ namespace DocumentManagement.DocumentStore.Blob.Tests
         [Fact]
         public async Task UploadAsync_TheSameDocumentName_DocumentUploaded()
         {
-            var name = fixture.Create<string>();
+            var name = CreateFileName();
             var content = fixture.Create<string>();
 
             byte[] byteArray = Encoding.ASCII.GetBytes(content);
@@ -60,8 +60,9 @@ namespace DocumentManagement.DocumentStore.Blob.Tests
             var content = fixture.Create<string>();
 
             var entities = fixture.CreateMany<string>(2)
+                .Select(s => string.Concat(s, ".pdf"))
                 .Select(name => DocumentEntity.Create(name, content.Length, new Uri($"{containerUri}/{name}")))
-                .Select(s => s.entity)
+                .Select(s => s.Result)
                 .ToArray();
 
             byte[] byteArray = Encoding.ASCII.GetBytes(content);
@@ -73,7 +74,7 @@ namespace DocumentManagement.DocumentStore.Blob.Tests
 
             var result = await store.GetAllAsync();
 
-            result.Should().BeEquivalentTo(entities);
+            result.Result.Should().BeEquivalentTo(entities);
         }
 
         [Fact]
@@ -81,38 +82,39 @@ namespace DocumentManagement.DocumentStore.Blob.Tests
         {
             var result = await store.GetAllAsync();
 
-            result.Should().BeEmpty();
+            result.Successful.Should().BeTrue();
+            result.Result.Should().BeEmpty();
         }
 
         [Fact]
         public async Task ReorderAsync_SigleDocument_DocumentReordered()
         {
-            var name = fixture.Create<string>();
+            var name = CreateFileName();
             var content = fixture.Create<string>();
 
             byte[] byteArray = Encoding.ASCII.GetBytes(content);
             using var stream = new MemoryStream(byteArray);
 
-            var (_, entity) = DocumentEntity.Create(name, content.Length, new Uri($"{containerUri}/{name}"), 5);
+            var entityResult = DocumentEntity.Create(name, content.Length, new Uri($"{containerUri}/{name}"), 5);
 
             await store.UploadAsync(name, stream);
-            await store.ReorderAsync(entity);
+            await store.ReorderAsync(entityResult.Result);
 
             var result = await store.GetAllAsync();
 
-            result.Should().ContainSingle()
-                .Which.Should().BeEquivalentTo(entity);
+            result.Result.Should().ContainSingle()
+                .Which.Should().BeEquivalentTo(entityResult.Result);
         }
 
         [Fact]
         public async Task ReorderAsync_NoDocument_ErrorResultReturned()
         {
-            var name = fixture.Create<string>();
+            var name = CreateFileName();
             var content = fixture.Create<string>();
 
-            var (_, entity) = DocumentEntity.Create(name, content.Length, new Uri($"{containerUri}/{name}"), 5);
+            var entityResult = DocumentEntity.Create(name, content.Length, new Uri($"{containerUri}/{name}"), 5);
 
-            var result = await store.ReorderAsync(entity);
+            var result = await store.ReorderAsync(entityResult.Result);
 
             result.Successful.Should().BeFalse();
         }
@@ -120,7 +122,7 @@ namespace DocumentManagement.DocumentStore.Blob.Tests
         [Fact]
         public async Task DaleteAsync_SigleDocument_DocumentDeleted()
         {
-            var name = fixture.Create<string>();
+            var name = CreateFileName();
             var content = fixture.Create<string>();
 
             byte[] byteArray = Encoding.ASCII.GetBytes(content);
@@ -131,16 +133,21 @@ namespace DocumentManagement.DocumentStore.Blob.Tests
 
             var result = await store.GetAllAsync();
 
-            result.Should().BeEmpty();
+            result.Result.Should().BeEmpty();
         }
 
         [Fact]
         public async Task DaleteAsync_NoDocument_ErrorResultReturned()
         {
-            var name = fixture.Create<string>();
+            var name = CreateFileName();
             var result = await store.DeleteAsync(name);
 
             result.Successful.Should().BeFalse();
+        }
+
+        private string CreateFileName()
+        {
+            return fixture.Create<string>() + ".pdf";
         }
     }
 }

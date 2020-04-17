@@ -32,13 +32,17 @@ namespace DocumentManagement.API
         /// </summary>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         [HttpGet("")]
-        public async Task<IReadOnlyCollection<Document>> GetAllAsync()
+        public async Task<OperationResult<IReadOnlyCollection<Document>>> GetAllAsync()
         {
-            var entities = await documentStore.GetAllAsync();
+            var operationResult = await documentStore.GetAllAsync();
 
-            return entities
-                .Select(Document.ToDocument)
-                .ToArray();
+            if (operationResult.Successful)
+            {
+                var documents = operationResult.Result.Select(Document.ToDocument).ToArray();
+                return new OperationResult<IReadOnlyCollection<Document>>(documents);
+            }
+
+            return new OperationResult<IReadOnlyCollection<Document>>(operationResult.Errors.ToArray());
         }
 
         /// <summary>
@@ -49,14 +53,14 @@ namespace DocumentManagement.API
         [HttpPost("")]
         public async Task<OperationResult> UpploadAsync(IFormFile file)
         {
-            var (operatinoResult, entity) = DocumentEntity.Create(file.FileName, file.Length, null);
+            var operatinoResult = DocumentEntity.Create(file.FileName, file.Length, null);
 
             if (!operatinoResult.Successful)
             {
                 return operatinoResult;
             }
 
-            return await documentStore.UploadAsync(entity.Name, file.OpenReadStream());
+            return await documentStore.UploadAsync(operatinoResult.Result.Name, file.OpenReadStream());
         }
 
         /// <summary>
@@ -83,16 +87,16 @@ namespace DocumentManagement.API
             var entities = documents.Select(s => DocumentEntity.Create(s.Name, fakeSize, null, s.Order))
                 .ToArray();
 
-            if (entities.Any(s => !s.result.Successful))
+            if (entities.Any(s => !s.Successful))
             {
                 var errors = entities
-                    .Aggregate(Enumerable.Empty<string>(), (ac, next) => next.result.Successful ? ac : ac.Union(next.result.Errors))
+                    .Aggregate(Enumerable.Empty<string>(), (ac, next) => next.Successful ? ac : ac.Union(next.Errors))
                 .ToArray();
 
                 return new OperationResult(errors);
             }
 
-            return await documentStore.ReorderAsync(entities.Select(s => s.entity).ToArray());
+            return await documentStore.ReorderAsync(entities.Select(s => s.Result).ToArray());
         }
     }
 }

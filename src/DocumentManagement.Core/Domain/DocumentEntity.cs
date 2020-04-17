@@ -47,23 +47,23 @@ namespace DocumentManagement.Core.Domain
         /// <param name="location">Location.</param>
         /// <param name="order">Order.</param>
         /// <returns>Document entity.</returns>
-        public static (OperationResult result, DocumentEntity entity) Create(string name, long size, Uri location, long order = 0)
+        public static OperationResult<DocumentEntity> Create(string name, long size, Uri location, long order = 0)
         {
             if (string.IsNullOrEmpty(name)
                 || !Regex.IsMatch(name, ValidFileNamePattern)
                 || !name.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
             {
                 var errorMessage = $"Invalid document name '{name}'. Document should be only PDF with name that contains only alphanumerics or special character '$-_.+!*'(),'.";
-                return (new OperationResult(errorMessage), default);
+                return new OperationResult<DocumentEntity>(errorMessage);
             }
 
             if (size > MaxFileSizeButes || size <= 0)
             {
                 var errorMessage = $"Invalid file size '{size}'. Supported file size should be less then 5Mb.";
-                return (new OperationResult(errorMessage), default);
+                return new OperationResult<DocumentEntity>(errorMessage);
             }
 
-            return (OperationResult.SuccessfulResult(), new DocumentEntity(name, size, location, order));
+            return new OperationResult<DocumentEntity>(new DocumentEntity(name, size, location, order));
         }
     }
 }
