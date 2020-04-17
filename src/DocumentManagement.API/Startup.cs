@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using DocumentManagement.API.Configurations;
+using DocumentManagement.API.Middlewares;
 using DocumentManagement.DocumentStore.Blob;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -59,6 +60,9 @@ namespace DocumentManagement
         /// <param name="env">Host environment.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<RequestLoggingMiddleware>();
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
