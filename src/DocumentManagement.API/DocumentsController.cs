@@ -14,6 +14,7 @@ namespace DocumentManagement.API
     /// Document controller.
     /// </summary>
     [Route("api/[controller]")]
+    [AddStatusCodeFileter]
     public class DocumentsController
     {
         private readonly IDocumentStore documentStore;
