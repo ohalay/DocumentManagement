@@ -61,7 +61,7 @@ namespace DocumentManagement.DocumentStore.Blob.Tests
 
             var entities = fixture.CreateMany<string>(2)
                 .Select(name => DocumentEntity.Create(name, content.Length, new Uri($"{containerUri}/{name}")))
-                .Select(s => s.Item2)
+                .Select(s => s.entity)
                 .ToArray();
 
             byte[] byteArray = Encoding.ASCII.GetBytes(content);

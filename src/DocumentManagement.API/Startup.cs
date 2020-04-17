@@ -40,6 +40,7 @@ namespace DocumentManagement
             var config = Configuration.Get<Config>();
 
             services
+                .AddApplicationInsightsTelemetry()
                 .AddBlobDocumentStore(s => s.ConnectionString = config.StorageAccount.ConnectionString)
                 .AddSwaggerGen(c =>
                 {
